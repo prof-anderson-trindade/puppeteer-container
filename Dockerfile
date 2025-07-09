@@ -48,27 +48,29 @@ RUN apt-get update && apt-get install -y \
 # Define o diretório de trabalho
 WORKDIR /app
 
-# Define variáveis de ambiente para o Puppeteer ANTES da instalação
-# Isso permite que o Puppeteer baixe o Chromium durante npm install
+# Define variáveis de ambiente para o Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false
-# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
-ENV PUPPETEER_CACHE_DIR=/home/node/.cache/puppeteer
 
-# Copia apenas os arquivos de dependências primeiro (para cache eficiente)
+# Copia apenas os arquivos de dependências primeiro
 COPY package.json package-lock.json* ./
 
-# Se o UID/GID for diferente de 1000, ajusta o usuário node
-RUN if [ "$USER_UID" != "1000" ] || [ "$USER_GID" != "1000" ]; then \
-        # Modifica o UID/GID do usuário node existente \
-        groupmod -g ${USER_GID} node && \
-        usermod -u ${USER_UID} -g ${USER_GID} node && \
-        # Ajusta as permissões do home do usuário \
-        chown -R ${USER_UID}:${USER_GID} /home/node; \
+# Cria usuário apropriado baseado no UID/GID
+RUN if [ "${USER_UID}" = "1000" ] && [ "${USER_GID}" = "1000" ]; then \
+        echo "Using existing node user (UID 1000)" && \
+        echo "PUPPETEER_CACHE_DIR=/home/node/.cache/puppeteer" >> /etc/environment; \
+    else \
+        echo "Creating new appuser with UID ${USER_UID}" && \
+        groupadd -g ${USER_GID} appuser && \
+        useradd -m -u ${USER_UID} -g ${USER_GID} appuser && \
+        echo "PUPPETEER_CACHE_DIR=/home/appuser/.cache/puppeteer" >> /etc/environment; \
     fi
 
-# Cria o diretório de cache do Puppeteer com permissões corretas
-RUN mkdir -p /home/node/.cache/puppeteer && \
-    chown -R node:node /home/node/.cache
+# Cria diretórios necessários baseado no usuário
+RUN if [ "${USER_UID}" = "1000" ] && [ "${USER_GID}" = "1000" ]; then \
+        mkdir -p /home/node/.cache/puppeteer /app/logs; \
+    else \
+        mkdir -p /home/appuser/.cache/puppeteer /app/logs; \
+    fi
 
 # Instala as dependências do npm como root
 RUN npm ci || npm install
@@ -76,21 +78,26 @@ RUN npm ci || npm install
 # Instala PM2 globalmente
 RUN npm install -g pm2
 
-# Ajusta permissões do diretório de trabalho
-RUN chown -R node:node /app
+# Copia o arquivo de configuração do PM2 (se existir)
+COPY ecosystem.config.js* ./
 
-# Adiciona o usuário node aos grupos necessários para o Puppeteer
-RUN usermod -a -G audio,video node
+# Adiciona o usuário aos grupos necessários e ajusta permissões
+RUN if [ "${USER_UID}" = "1000" ] && [ "${USER_GID}" = "1000" ]; then \
+        usermod -a -G audio,video node && \
+        chown -R node:node /app /home/node; \
+    else \
+        usermod -a -G audio,video appuser && \
+        chown -R appuser:appuser /app /home/appuser; \
+    fi
 
-# Muda para o usuário node
-USER node
+# Muda para o usuário apropriado
+# Se UID=1000, usa node. Senão, usa appuser
+USER ${USER_UID}
+
+RUN npx puppeteer browsers install
 
 # Expõe a porta do servidor
 EXPOSE 3000
 
-# Comando padrão - usando PM2
-# Copia o arquivo de configuração do PM2 (se existir)
-COPY ecosystem.config.js* ./
-
-# Comando padrão - usando PM2 com ecosystem config ou fallback para server.js
+# Comando padrão
 CMD ["sh", "-c", "if [ -f ecosystem.config.js ]; then pm2-runtime start ecosystem.config.js; else pm2-runtime start server.js --name puppeteer-app; fi"]
