@@ -10,7 +10,7 @@ Imagem Docker pronta para produção com Node.js 20 e Puppeteer, otimizada para 
 ## 🚀 Quick Start
 
 ```bash
-docker pull ghcr.io/prof-anderson.trindade/puppeteer-container:latest
+docker pull ghcr.io/prof-anderson-trindade/puppeteer-container:latest
 ```
 
 ## 📦 O que está incluído?
@@ -29,7 +29,7 @@ docker pull ghcr.io/prof-anderson.trindade/puppeteer-container:latest
 docker run -it --rm \
   -v $(pwd):/app \
   -w /app \
-  ghcr.io/prof-anderson.trindade/puppeteer-container:latest \
+  ghcr.io/prof-anderson-trindade/puppeteer-container:latest \
   node seu-script.js
 ```
 
@@ -40,7 +40,7 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/prof-anderson.trindade/puppeteer-container:latest
+    image: ghcr.io/prof-anderson-trindade/puppeteer-container:latest
     volumes:
       - ./:/app
     working_dir: /app
@@ -58,7 +58,7 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/prof-anderson.trindade/puppeteer-container:latest
+    image: ghcr.io/prof-anderson-trindade/puppeteer-container:latest
     volumes:
       - ./:/app
     working_dir: /app
@@ -103,14 +103,14 @@ const puppeteer = require('puppeteer');
 
 ```bash
 # Clone o repositório
-git clone https://github.com/prof-anderson.trindade/puppeteer-container.git
+git clone https://github.com/prof-anderson-trindade/puppeteer-container.git
 cd puppeteer-container
 
 # Build
-docker build -t ghcr.io/prof-anderson.trindade/puppeteer-container:local .
+docker build -t ghcr.io/prof-anderson-trindade/puppeteer-container:local .
 
 # Testar localmente
-docker run -it --rm ghcr.io/prof-anderson.trindade/puppeteer-container:local node --version
+docker run -it --rm ghcr.io/prof-anderson-trindade/puppeteer-container:local node --version
 ```
 
 ## 📄 Licença
