@@ -1,6 +1,6 @@
 # 🎭 Puppeteer Docker Image
 
-[![GitHub Actions](https://github.com/prof-anderson.trindade/puppeteer-container/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/prof-anderson.trindade/puppeteer-container/actions)
+[![GitHub Actions](https://github.com/prof-anderson-trindade/puppeteer-container/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/prof-anderson-trindade/puppeteer-container/actions)
 [![GitHub Package Registry](https://img.shields.io/badge/ghcr.io-available-brightgreen)](https://github.com/prof-anderson-trindade/puppeteer-container/pkgs/container/puppeteer-container)
 
 
