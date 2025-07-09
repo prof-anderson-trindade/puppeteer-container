@@ -1,14 +1,14 @@
 # 🎭 Puppeteer Docker Image
 
-[![GitHub Actions](https://github.com/SEU_USUARIO/puppeteer-docker/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/SEU_USUARIO/puppeteer-docker/actions)
-[![GitHub Package Registry](https://img.shields.io/badge/ghcr.io-available-brightgreen)](https://github.com/SEU_USUARIO/puppeteer-docker/pkgs/container/puppeteer-docker)
+[![GitHub Actions](https://github.com/prof-anderson.trindade/puppeteer-docker/workflows/Build%20and%20Push%20Docker%20Image/badge.svg)](https://github.com/prof-anderson.trindade/puppeteer-docker/actions)
+[![GitHub Package Registry](https://img.shields.io/badge/ghcr.io-available-brightgreen)](https://github.com/prof-anderson.trindade/puppeteer-docker/pkgs/container/puppeteer-docker)
 
 Imagem Docker pronta para produção com Node.js 20 e Puppeteer, otimizada para ambientes headless.
 
 ## 🚀 Quick Start
 
 ```bash
-docker pull ghcr.io/SEU_USUARIO/puppeteer-docker:latest
+docker pull ghcr.io/prof-anderson.trindade/puppeteer-docker:latest
 ```
 
 ## 📦 O que está incluído?
@@ -27,7 +27,7 @@ docker pull ghcr.io/SEU_USUARIO/puppeteer-docker:latest
 docker run -it --rm \
   -v $(pwd):/app \
   -w /app \
-  ghcr.io/SEU_USUARIO/puppeteer-docker:latest \
+  ghcr.io/prof-anderson.trindade/puppeteer-docker:latest \
   node seu-script.js
 ```
 
@@ -38,7 +38,7 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/SEU_USUARIO/puppeteer-docker:latest
+    image: ghcr.io/prof-anderson.trindade/puppeteer-docker:latest
     volumes:
       - ./:/app
     working_dir: /app
@@ -56,7 +56,7 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/SEU_USUARIO/puppeteer-docker:latest
+    image: ghcr.io/prof-anderson.trindade/puppeteer-docker:latest
     volumes:
       - ./:/app
     working_dir: /app
@@ -101,24 +101,16 @@ const puppeteer = require('puppeteer');
 
 ```bash
 # Clone o repositório
-git clone https://github.com/SEU_USUARIO/puppeteer-docker.git
+git clone https://github.com/prof-anderson.trindade/puppeteer-docker.git
 cd puppeteer-docker
 
 # Build
-docker build -t ghcr.io/SEU_USUARIO/puppeteer-docker:local .
+docker build -t ghcr.io/prof-anderson.trindade/puppeteer-docker:local .
 
 # Testar localmente
-docker run -it --rm ghcr.io/SEU_USUARIO/puppeteer-docker:local node --version
+docker run -it --rm ghcr.io/prof-anderson.trindade/puppeteer-docker:local node --version
 ```
 
 ## 📄 Licença
 
 MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## 🤝 Contribuições
-
-Pull requests são bem-vindos! Para mudanças maiores, abra uma issue primeiro.
-
-## 🐛 Problemas?
-
-Abra uma issue em: https://github.com/SEU_USUARIO/puppeteer-docker/issues
